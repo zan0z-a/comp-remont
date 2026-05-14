@@ -31,7 +31,12 @@ class AdminController extends Controller
             'description' => 'nullable', 'full_description' => 'nullable',
             'price' => 'required|numeric', 'image' => 'nullable|image',
         ]);
-        if ($request->hasFile('image')) $data['image'] = $request->file('image')->store('images/services', 'public');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images/services'), $imageName);
+            $data['image'] = 'images/services/' . $imageName;
+        }
         Service::create($data);
         return redirect()->back()->with('success', 'Услуга добавлена');
     }
@@ -45,8 +50,13 @@ class AdminController extends Controller
             'price' => 'required|numeric', 'image' => 'nullable|image',
         ]);
         if ($request->hasFile('image')) {
-            if ($service->image) Storage::disk('public')->delete($service->image);
-            $data['image'] = $request->file('image')->store('images/services', 'public');
+            if ($service->image && file_exists(public_path($service->image))) {
+                unlink(public_path($service->image));
+            }
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images/services'), $imageName);
+            $data['image'] = 'images/services/' . $imageName;
         }
         $service->update($data);
         return redirect()->back()->with('success', 'Услуга обновлена');
@@ -55,7 +65,9 @@ class AdminController extends Controller
     public function serviceDelete($id) {
         $this->checkAdmin();
         $service = Service::findOrFail($id);
-        if ($service->image) Storage::disk('public')->delete($service->image);
+        if ($service->image && file_exists(public_path($service->image))) {
+            unlink(public_path($service->image));
+        }
         $service->delete();
         return redirect()->back()->with('success', 'Удалено');
     }
@@ -79,7 +91,12 @@ class AdminController extends Controller
             'preview_text' => 'nullable', 'content' => 'required',
             'image' => 'nullable|image',
         ]);
-        if ($request->hasFile('image')) $data['image'] = $request->file('image')->store('images/articles', 'public');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images/articles'), $imageName);
+            $data['image'] = 'images/articles/' . $imageName;
+        }
         $data['is_published'] = true;
         $data['published_at'] = now();
         Article::create($data);

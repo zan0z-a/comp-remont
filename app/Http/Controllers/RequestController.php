@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RequestController extends Controller {
     public function create() {
-        $services = Service::where('is_active', true)->orderBy('sort_order')->get();
+        $services = Service::where('is_active', true)->orderBy('id')->get();
         return view('request', compact('services'));
     }
 public function store(Request $request)

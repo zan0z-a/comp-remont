@@ -8,8 +8,9 @@ class UserSeeder extends Seeder {
     public function run(): void {
         DB::table('users')->insert([
             'name' => 'Admin',
-            'email' => 'admin@comp-remont.local',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
+            'is_admin' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

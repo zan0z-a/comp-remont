@@ -9,6 +9,8 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
@@ -32,3 +34,16 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+
+
+Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+Route::post('/admin/services', [AdminController::class, 'serviceStore'])->name('admin.service.store');
+Route::put('/admin/services/{id}', [AdminController::class, 'serviceUpdate'])->name('admin.service.update');
+Route::delete('/admin/services/{id}', [AdminController::class, 'serviceDelete'])->name('admin.service.delete');
+Route::put('/admin/requests/{id}/status', [AdminController::class, 'requestStatus'])->name('admin.request.status');
+Route::delete('/admin/requests/{id}', [AdminController::class, 'requestDelete'])->name('admin.request.delete');
+Route::post('/admin/articles', [AdminController::class, 'articleStore'])->name('admin.article.store');
+Route::post('/admin/reviews/{id}/approve', [AdminController::class, 'reviewApprove'])->name('admin.review.approve');
+Route::delete('/admin/reviews/{id}', [AdminController::class, 'reviewDelete'])->name('admin.review.delete');

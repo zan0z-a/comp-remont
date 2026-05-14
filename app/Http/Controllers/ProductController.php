@@ -4,7 +4,7 @@ use App\Models\Service;
 
 class ProductController extends Controller {
     public function index() {
-        $services = Service::where('is_active', true)->orderBy('sort_order')->get();
+        $services = Service::where('is_active', true)->get();
         return view('products', compact('services'));
     }
     public function show($slug) {
